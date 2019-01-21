@@ -5,19 +5,37 @@
  * @Author: hammercui
  * @Date: 2019-01-19 17:03:17
  * @LastEditors: hammercui
- * @LastEditTime: 2019-01-19 19:00:59
+ * @LastEditTime: 2019-01-21 11:50:43
  */
 
 import React from 'react';
 import Link from 'umi/link';
+import { connect } from 'dva';
+export interface IBasicLayoutProps{
+  dispatch:Function
+}
+@connect(({ login }) => ({
+}))
+class BasicLayout extends React.PureComponent<IBasicLayoutProps,any> {
+  constructor(props) {
+    super(props);
+  }
 
-export default class BasicLayout extends React.Component {
+	handleLogout = ()=>{
+    const { dispatch } = this.props;
+		dispatch({
+			type: 'login/fetchLogout'
+		});
+	}
+
 	renderNavigation() {
 		return (
 			<div>
 				<Link to="/dashboard">/dashboard</Link>
-        <div> | </div>
-        <Link to="/dashboard/info">/dashboard/info</Link>
+				<div> | </div>
+				<Link to="/dashboard/info">/dashboard/info</Link>
+				<div> | </div>
+				<div onClick={this.handleLogout}>登出</div>
 			</div>
 		);
 	}
@@ -34,3 +52,5 @@ export default class BasicLayout extends React.Component {
 		);
 	}
 }
+
+export default BasicLayout;

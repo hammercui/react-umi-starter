@@ -5,12 +5,15 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "jsx": "react",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "lib": ["esnext", "dom"],
     "esModuleInterop": true,
     "sourceMap": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "components": ["components"]
     },
     "allowSyntheticDefaultImports": true
   }

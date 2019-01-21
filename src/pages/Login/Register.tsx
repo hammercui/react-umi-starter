@@ -5,7 +5,7 @@
  * @Author: hammercui
  * @Date: 2019-01-19 17:03:17
  * @LastEditors: hammercui
- * @LastEditTime: 2019-01-19 17:07:30
+ * @LastEditTime: 2019-01-21 11:52:15
  */
 
 import React from 'react';
@@ -14,7 +14,7 @@ export default class RegisterPage extends React.Component{
   render(){
     return (
       <div>
-        注册页
+        i am 注册页
       </div>
     );
   }

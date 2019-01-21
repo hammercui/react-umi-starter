@@ -1,11 +1,12 @@
 defaultSeverity: error
 extends:
   - tslint-react
-  - tslint-eslint-rules
+  # - tslint-eslint-rules
+  - tslint-config-prettier
 jsRules:
 rules:
-  eofline: true
-  no-console: true
-  no-construct: true
-  no-debugger: true
-  no-reference: true
+  eofline: false
+  no-console: false
+  no-construct: false
+  no-debugger: false
+  no-reference: false
