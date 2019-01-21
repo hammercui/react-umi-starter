@@ -27,6 +27,7 @@ export default class Info extends React.Component<IinfoProps, any> {
 	};
 
 	render() {
+    console.log('渲染');
 		const { list } = this.props;
 		return (
 			<div className={styles.normal}>

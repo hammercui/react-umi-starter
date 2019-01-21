@@ -18,12 +18,12 @@ const plugins = [
       dynamicImport: {
         webpackChunkName: true,
         loadingComponent: './components/PageLoading',
-        level:1
+        // level:1
       },
       ...(!process.env.TEST && os.platform() === 'darwin'
         ? {
             dll: {
-              include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch', 'lodash', 'moment'],
+              include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch', 'lodash', 'moment','immutable'],
               exclude: ['@babel/runtime'],
             },
             hardSource: true,
@@ -56,9 +56,9 @@ const config = {
   // 路由配置
   routes: pageRoutes,
 
-  externals: {
-    '@antv/data-set': 'DataSet',
-  },
+  // externals: {
+  //   '@antv/data-set': 'DataSet',
+  // },
   //反向代理，解决开发时cros问题
   proxy: {
     '/api/': {

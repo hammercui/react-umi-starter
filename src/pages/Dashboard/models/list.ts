@@ -40,6 +40,10 @@ export default {
 				val.score = score;
 				return val;
       });
+      newlist = newlist.update(id+3, val => {
+				val.score = score;
+				return val;
+      });
 
 			console.log('newlist', newlist.get(id));
 			return { ...state, dataArray: newlist.toArray() };
