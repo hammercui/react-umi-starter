@@ -48,7 +48,7 @@ export default {
 				val.score = score;
 				return val;
       });
-      newlist = newlist.update(id+3, val => {
+      newlist = newlist.update(id+2, val => {
 				val.score = score;
 				return val;
       });

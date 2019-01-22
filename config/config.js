@@ -14,12 +14,15 @@ const plugins = [
         ie: 11,
       },
 
-      // 按需加载
-      dynamicImport: {
-        webpackChunkName: true,
-        loadingComponent: './components/PageLoading',
-        // level:1
-      },
+      // production开启按需加载
+      ...(process.env.NODE_ENV === 'production'?{
+        dynamicImport: {
+          webpackChunkName: true,
+          loadingComponent: './components/PageLoading',
+          // level:1
+        },
+      }:{}),
+
       ...(!process.env.TEST && os.platform() === 'darwin'
         ? {
             dll: {
