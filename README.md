@@ -24,9 +24,30 @@ npm run start
 
 **Alpha本地测试**
 ```
-
+npm run build
+npm run alpha
+启动一个静态资源服务器，资源位于/dist目录,用于在beta测试前，进行本地打包测试
 ```
 
 **打包部署**
 ```
+npm run build
+```
+## 目录结构
+
+```
++ config //配置文件目录，取代.umirc
+  - alphaServer.js //alpha服务器
+  - config.js      //项目配置文件
+  - router.config.js //集中路由
++ src
+  + components //公共组件
+  + layouts    //骨架布局
+  + models     //redux和redux-saga目录
+  + pages      //路由页面
+  + services   //api目录
+  + utils      //工具类
+    - request.ts //http请求工具，无限轮询模式
+    - utils.ts   //全局工具类
+  - app.ts     //app基础类，此处配置dva-logger插件
 ```

@@ -1,5 +1,5 @@
 import { List } from 'immutable';
-
+import {test as githubTest} from "@/services/github";
 export interface Istudent {
 	name: string;
 	id: number;
@@ -25,12 +25,20 @@ const getInit = (): Ilist => {
 
 export default {
 	state: getInit(),
-	namespace: 'list',
+  namespace: 'list',
+  effects:{
+    *fetchUpdateList({ payload },{call,put}) {
+      const response = yield call(githubTest);
+      yield put({
+        type:"updateList",
+        payload:payload
+      })
+		},
+  },
 	reducers: {
 		initList(state, { payload }) {
 			return state;
 		},
-
 		updateList(state: Ilist, { payload }): Ilist {
 			let id: number = payload.id;
 			let score = payload.score;

@@ -70,6 +70,12 @@ const config = {
       target: 'http://47.104.239.185/megaupload',
       changeOrigin: true,
     },
+    "/github":{
+      target:"https://api.github.com/",
+      changeOrigin: true,
+      pathRewrite: { '^/github': '/' },//实际的请求路径 https://api.github.com/users/octocat
+    }
+
   },
   ignoreMomentLocale: true,
   lessLoaderOptions: {

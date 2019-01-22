@@ -6,14 +6,14 @@ import { connect } from 'dva';
 
 export interface IinfoProps {
 	list: Ilist;
-	dispatch: Function;
+  dispatch: Function;
+  loading:boolean;
 }
 
-@connect(({ list }) => ({
-	list: list
+@connect(({ list, loading}:{list:Ilist;loading:IdvaLoading}) => ({
+  list: list,
+  loading:loading.effects['list/fetchUpdateList']
 }))
-
-
 export default class Info extends React.Component<IinfoProps, any> {
   //测试更新
 	handleUpdate = () => {
@@ -21,19 +21,19 @@ export default class Info extends React.Component<IinfoProps, any> {
 		const newScore = list.dataArray[5].score + 10;
 		const payload = { id: 5, score: newScore };
 		dispatch({
-			type: 'list/updateList',
+			type: 'list/fetchUpdateList',
 			payload: payload
 		});
 	};
 
 	render() {
     console.log('渲染');
-		const { list } = this.props;
+		const { list,loading } = this.props;
 		return (
 			<div className={styles.normal}>
 				info页面
 				<div>演示immutable.js的List的使用</div>
-				<button onClick={this.handleUpdate}>测试更新数据</button>
+				<button disabled={loading} onClick={this.handleUpdate}>{loading?"loading":"测试更新数据"}</button>
 				<ul>
 					{list.dataArray.map((item, key) => (
 						<li key={key} style={{ display: 'flex', margin: 10 }}>

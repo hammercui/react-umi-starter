@@ -16,7 +16,10 @@ export const setToken = (tokenInfo) => {
 	localStorage.setItem('mega-manager-uid', String(uid));
 	localStorage.setItem('mega-manager-token', access_token);
 };
-
+// 获得token
+export const getUid = (): number => {
+	return uid;
+};
 
 /**
  * @name: 获得权限文本
@@ -51,3 +54,5 @@ export function setAuthority(authority) {
 	const proAuthority = typeof authority === 'string' ? [authority] : authority;
 	return localStorage.setItem('mega-authority', JSON.stringify(proAuthority));
 }
+
+
