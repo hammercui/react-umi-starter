@@ -10,7 +10,6 @@
     "precommit": "lint-staged"
   },
   "dependencies": {
-    "antd": "^3.12.3",
     "dva-logger": "^1.0.0",
     "hash": "^0.2.1",
     "immutable": "^4.0.0-rc.12",
