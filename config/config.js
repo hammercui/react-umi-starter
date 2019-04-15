@@ -115,13 +115,13 @@ const config = {
     },
   },
 
-  outputPath: './megaconsole', // 导出路径
-  publicPath: '/megaconsole/', // 导出index引用带megaconsole前缀
+  // outputPath: './megaconsole', // 导出路径
+  // publicPath: '/megaconsole/', // 导出index引用带megaconsole前缀
   hash: true, // 导出文件带hash
 
-  manifest: {
-    basePath: '/megaconsole',
-  },
+  // manifest: {
+  //   basePath: '/megaconsole',
+  // },
   // 该字段控制动态修改主题
   // chainWebpack: webpackPlugin,//改善经常编译95%的问题
 };
