@@ -1,7 +1,11 @@
+/* eslint-disable jsx-a11y/label-has-associated-control */
+// eslint-disable-next-line jsx-a11y/label-has-associated-control
+/* eslint-disable import/no-named-as-default */
 // https://umijs.org/config/
 import os from 'os';
+// eslint-disable-next-line import/no-named-as-default-member
 import pageRoutes from './router.config';
-import webpackPlugin from './plugin.config';
+// import webpackPlugin from './plugin.config';
 import defaultSettings from '../src/defaultSettings';
 
 const plugins = [
@@ -22,11 +26,11 @@ const plugins = [
         baseNavigator: true, // default true, when it is true, will use `navigator.language` overwrite default
       },
       // 按需加载
-      // dynamicImport: {
-      //   webpackChunkName: true,
-      //   loadingComponent: './components/PageLoading/index',
-      //   level:1
-      // },
+      dynamicImport: {
+        webpackChunkName: true,
+        loadingComponent: './components/PageLoading/index',
+        level:1
+      },
       ...(!process.env.TEST && os.platform() === 'darwin'
         ? {
             dll: {
@@ -67,9 +71,9 @@ const config = {
   theme: {
     'primary-color': defaultSettings.primaryColor,
   },
-  externals: {
-    '@antv/data-set': 'DataSet',
-  },
+  // externals: {
+  //   '@antv/data-set': 'DataSet',
+  // },
   proxy: {
     '/api/': {
       target: 'http://localhost:7001/',
