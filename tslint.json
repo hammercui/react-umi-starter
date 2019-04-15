@@ -1,0 +1,16 @@
+{
+  "extends": ["tslint:latest", "tslint-react", "tslint-config-prettier"],
+  "rules": {
+    // TS特性
+    "member-access": false, // 设置成员对象的访问权限（public,private,protect)
+    "member-ordering": false,
+    "ordered-imports":false,
+    "no-var-requires": false,
+    "no-submodule-imports": false,
+    "object-literal-sort-keys": false,
+    "jsx-no-lambda": false,
+    "no-implicit-dependencies": false,
+    "no-console": false,
+    "ban-types":false,
+  }
+}

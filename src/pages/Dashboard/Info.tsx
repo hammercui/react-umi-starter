@@ -3,6 +3,8 @@ import * as styles from './index.less';
 
 import { Ilist } from './models/list';
 import { connect } from 'dva';
+import {Layout, Card} from "antd";
+import Link from 'umi/link';
 
 export interface IinfoProps {
 	list: Ilist;
@@ -30,20 +32,26 @@ export default class Info extends React.Component<IinfoProps, any> {
     console.log('渲染');
 		const { list,loading } = this.props;
 		return (
-			<div className={styles.normal}>
-				info页面
-				<div>演示immutable.js的List的使用</div>
-				<button disabled={loading} onClick={this.handleUpdate}>{loading?"loading":"测试更新数据"}</button>
-				<ul>
-					{list.dataArray.map((item, key) => (
-						<li key={key} style={{ display: 'flex', margin: 10 }}>
-							<div style={{ margin: 10 }}>{item.name}</div>
-							<div style={{ margin: 10 }}>{item.id}</div>
-							<div style={{ margin: 10 }}>{item.score}</div>
-						</li>
-					))}
-				</ul>
-			</div>
+      <Layout>
+        <Card>
+        <div className={styles.normal}>
+          info页面
+          <Link to="/dashboard">返回dashboard</Link>
+          <div>演示immutable.js的List的使用</div>
+          <button disabled={loading} onClick={this.handleUpdate}>{loading?"loading":"测试更新数据"}</button>
+          <ul>
+            {list.dataArray.map((item, key) => (
+              <li key={key} style={{ display: 'flex', margin: 10 }}>
+                <div style={{ margin: 10 }}>{item.name}</div>
+                <div style={{ margin: 10 }}>{item.id}</div>
+                <div style={{ margin: 10 }}>{item.score}</div>
+              </li>
+            ))}
+          </ul>
+        </div>
+        </Card>
+
+      </Layout>
 		);
 	}
 }

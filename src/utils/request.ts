@@ -1,6 +1,10 @@
 import fetch from 'dva/fetch';
+import { notification, message } from 'antd';
 import router from 'umi/router';
 import hash from 'hash.js';
+import { isAntdPro } from './utils';
+import { IloginResponse } from '../dto/manager';
+import Exception from '../components/Exception/index';
 
 const codeMessage = {
 	200: '服务器成功返回请求的数据。',
@@ -19,7 +23,14 @@ const codeMessage = {
 	503: '服务不可用，服务器暂时过载或维护。',
 	504: '网关超时。'
 };
+let uid: number = Number(localStorage.getItem('mega-manager-uid'));
+let access_token: string = localStorage.getItem('mega-manager-token');
+let access_tokenType = 'Bearer';
 
+// 获得token
+export const getUid = (): number => {
+	return uid;
+};
 /**
  *
  * @param type  'GET','POST','DELETE','PUT'
@@ -40,21 +51,41 @@ function requestGroupLog(type = 'GET', url, config, request, response) {
 	console.groupEnd();
 }
 
+// 存储token
+export const setToken = (tokenInfo: IloginResponse) => {
+	uid = tokenInfo.uid;
+	access_token = tokenInfo.token;
+	access_tokenType = tokenInfo.tokenType;
+	//存储local
+	localStorage.setItem('mega-manager-uid', String(uid));
+	localStorage.setItem('mega-manager-token', access_token);
+};
+
 const checkStatus = response => {
 	if (response.status === 400) return response;
 	if (response.status >= 200 && response.status < 300) {
 		return response;
 	}
 	const errortext = codeMessage[response.status] || response.statusText;
-	//todo 通知错误
+	notification.error({
+		message: `请求错误 ${response.status} `,
+		description: `url:${response.url}` + errortext,
+		style: {
+			width: 600,
+			marginLeft: 335 - 600
+		}
+	});
 	const error = new Error(errortext);
 	error.name = response.status;
 	//error.response = response;
 	throw error;
 };
 
-//存储缓存
 const cachedSave = (response, hashcode) => {
+	/**
+	 * Clone a response data and store it in sessionStorage
+	 * Does not support data other than json, Cache only json
+	 */
 	const contentType = response.headers.get('Content-Type');
 	if (contentType && contentType.match(/application\/json/i)) {
 		// All data is saved as text
@@ -78,6 +109,7 @@ const cachedSave = (response, hashcode) => {
  */
 export default function request(url, option) {
 	const options = {
+		expirys: isAntdPro(),
 		...option
 	};
 	/**
@@ -112,10 +144,10 @@ export default function request(url, option) {
 	}
 
 	//填充token
-	// newOptions.headers = {
-	// 	Authorization: access_tokenType + ' ' + access_token,
-	// 	...newOptions.headers
-	// };
+	newOptions.headers = {
+		Authorization: access_tokenType + ' ' + access_token,
+		...newOptions.headers
+	};
 
 	const expirys = options.expirys && 60;
 	// options.expirys !== false, return the cache,
@@ -170,18 +202,29 @@ export default function request(url, option) {
 			}
 		})
 		.catch(e => {
-      console.log(e);
       const status = Number.parseInt(e.name);
 			if (status === 400) {
-        //通知400错误
+				notification.error({
+					message: `400错误 `,
+          description: e.message,
+          style: {
+            width: 600,
+            marginLeft: 335 - 600
+          }
+				});
 				return;
 			}
 
 			requestGroupLog(newOptions.method, url, newOptions, newOptions.body, status);
 			if (status === 401) {
+				// @HACK
+				/* eslint-disable no-underscore-dangle */
 				window['g_app']._store.dispatch({
-					type: 'login/fetchLogout'
+					type: 'login/logout'
 				});
+				// window.g_app._store.dispatch({
+				//   type: 'login/logout',
+				// });
 				return;
 			}
 			// environment should not be used
@@ -190,7 +233,7 @@ export default function request(url, option) {
 				return;
 			}
 			if (status <= 504 && status >= 500) {
-				//router.push('/exception/500');
+				router.push('/exception/500');
 				return;
 			}
 			if (status >= 404 && status < 422) {

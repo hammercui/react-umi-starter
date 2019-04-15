@@ -1,62 +1,37 @@
-
-import {setAuthority} from "@/utils/authority";
+import { routerRedux } from 'dva/router';
+import { stringify } from 'qs';
+import { accountLogin, accountAuth, logoutAll, getPublicKey } from '@/services/user';
+import { setAuthority } from '@/utils/authority';
 import { getPageQuery } from '@/utils/utils';
-// import { routerRedux } from 'dva/router';
-import router from 'umi/router';
-export interface Ilogin {
+import { setToken, getUid } from '@/utils/request';
+import { reloadAuthorized } from '@/utils/Authorized';
+import { ILogin } from './login';
+
+export interface ILogin {
+	status: 'error' | 'success' | 'init';
+	type: 'account' | 'password' | 'none';
+	// token: string;
+	// tokenType: string;
 	uid: number;
-	currentAuthority: string;
+	currAuthority: number[];
 }
-const initValue: Ilogin = { uid: 0, currentAuthority: null };
+
+//初始值
+const initValue: ILogin = { status: 'init', type: 'none', uid: getUid(), currAuthority: [1, 2, 3, 4, 5, 6] }; //默认赋予全部权限
+
 export default {
 	namespace: 'login',
+
 	state: initValue,
+
 	effects: {
-		//请求登陆
-    *fetchLogin({ payload }, { callm, put }) {
-      //登陆成功
-      yield put({
-        type:'setLoginSucc',
-        payload:{token:"token",currentAuthority:"admin"}
-      })
-      const urlParams = new URL(window.location.href);
-			const params = getPageQuery();
-			let { redirect } = params;
-			if (redirect) {
-				const redirectUrlParams = new URL(redirect);
-				if (redirectUrlParams.origin === urlParams.origin) {
-					redirect = redirect.substr(urlParams.origin.length);
-					if (redirect.startsWith('/#')) {
-						redirect = redirect.substr(2);
-					}
-				} else {
-					window.location.href = redirect;
-					return;
-				}
-      }
-      console.log("redirect",redirect);
-			router.replace(!!redirect?redirect : '/');
-    },
-    //请求登出
-    *fetchLogout({ payload }, { call, put }) {
-      //登出成功
-      yield put({
-        type:'setLogoutSucc',
-        payload:{token:null,currentAuthority:"none"}
-      });
-      router.replace('/login/index');
-    }
+		// 带加密的登陆
+		*fetchLogin({ payload }: { payload }, { call, put }) {
+      yield put(routerRedux.replace('/'));
+		},
 	},
+
 	reducers: {
-		setLoginSucc(state, { payload }) {
-      //存储登录token和身份
-      setAuthority(payload.currentAuthority);
-      return state;
-    },
-    setLogoutSucc(state, { payload }) {
-      //存储登录token和身份
-      setAuthority(payload.currentAuthority);
-      return state;
-    }
+
 	}
 };

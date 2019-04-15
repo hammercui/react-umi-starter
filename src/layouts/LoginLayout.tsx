@@ -1,44 +1,50 @@
-/*
- * @Description: 登录页基础布局
- * @version: 1.0.0
- * @Company: sdbean
- * @Author: hammercui
- * @Date: 2019-01-19 10:46:44
- * @LastEditors: hammercui
- * @LastEditTime: 2019-01-21 11:51:21
- */
-
-import React from 'react';
-import * as styles from './LoginLayout.less';
+import React, { Fragment } from 'react';
+import { formatMessage } from 'umi/locale';
 import Link from 'umi/link';
+import { Icon } from 'antd';
+import { connect } from 'dva';
+import styles from './LoginLayout.less';
+import logo from '../assets/logo.png';
+import Footer from './Footer';
+import DocumentTitle from 'react-document-title';
 
-export type LoginLayoutComponent<P> = React.SFC<P>;
 
-export interface LoginLayoutProps extends React.Props<any> {
-	history?: History;
-	location?: Location;
+
+const copyright = (
+  <Fragment>
+    Copyright <Icon type="copyright" /> 2019 美嘉科技WEB技术部出品
+  </Fragment>
+);
+
+@connect(({ global }) => ({
+  serverEnv: global.serverEnv,
+}))
+class UserLayout extends React.PureComponent<any> {
+
+
+  render() {
+    const { children, serverEnv } = this.props;
+    return (
+      <DocumentTitle title="登陆" >
+      <div className={styles.container}>
+
+        <div className={styles.content}>
+          <div className={styles.top}>
+            <div className={styles.header}>
+              <Link to="/">
+                <img alt="logo" className={styles.logo} src={logo} />
+                <span className={styles.title}>MEGA 应用管理</span>
+              </Link>
+            </div>
+            <div className={styles.desc}>本系统是美嘉科技所有产品不可分割的一部分</div>
+          </div>
+          {children}
+        </div>
+        <Footer/>
+      </div>
+      </DocumentTitle>
+    );
+  }
 }
 
-
-const renderNavigation= ()=> {
-  return (
-    <div>
-      <Link to="/login/index">登录页</Link>
-      <div> | </div>
-      <Link to="/login/register">注册页</Link>
-    </div>
-  );
-}
-
-const LoginLayout: LoginLayoutComponent<LoginLayoutProps> = props => {
-	return (
-		<div className={styles.normal}>
-			<h1 className={styles.title}>LoginLayout头部</h1>
-      {renderNavigation()}
-      {props.children}
-      <h1 className={styles.title}>LoginLayout页脚</h1>
-		</div>
-	);
-};
-
-export default LoginLayout;
+export default UserLayout;

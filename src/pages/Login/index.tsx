@@ -10,9 +10,13 @@
 
 import React from 'react';
 import { connect } from 'dva';
+import * as styles from "./index.less"
+import {  Form, Button } from 'antd';
 
+import { FormComponentProps } from 'antd/lib/form/Form';
+import { RouteComponentProps } from 'react-router-dom';
 
-export interface ILoginPageProps {
+export interface ILoginPageProps extends RouteComponentProps,FormComponentProps  {
 	dispatch: Function;
 }
 
@@ -27,12 +31,12 @@ class LoginPage extends React.Component<ILoginPageProps, any> {
 
 	render() {
 		return (
-			<div>
+			<div  className={styles.main}>
 				i am 登录页
-				<button onClick={this.handleLogin}>登陆</button>
+				<Button onClick={this.handleLogin} type="primary">登陆</Button>
 			</div>
 		);
 	}
 }
 
-export default LoginPage;
+export default Form.create()(LoginPage) ;

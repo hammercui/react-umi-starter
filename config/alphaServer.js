@@ -15,20 +15,15 @@ const path = require('path');
 // 使用代理，解决cros问题
 const proxyContext = '/api';
 const proxyOptions = {
-	target: 'http://localhost:7002/', // api服务器地址
-	pathRewrite: { '^/': '/' }, // 路径重写
-	changeOrigin: true, // 改变源
-	secure: false // 接受运行在 https 上的服务
+  target: 'http://localhost:7002/', // api服务器地址
+  pathRewrite: { '^/': '/' }, // 路径重写
+  changeOrigin: true, // 改变源
+  secure: false, // 接受运行在 https 上的服务
 };
 app.use(proxyContext, proxy(proxyOptions));
 app.use(express.static(path.resolve(__dirname, '..', 'dist')));
 // console.log('准备启动测试服务器，端口'+localPort);
 // export default app;
-try {
-	app.listen(8444, () => {
-		console.log('启动服务成功', 'http://localhost:8444');
-	});
-} catch (e) {
-	console.log(e);
-}
-
+app.listen(8444, () => {
+  console.log('启动服务成功', 'http://192.168.1.211:8444');
+});

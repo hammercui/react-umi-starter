@@ -1,12 +1,14 @@
 // https://umijs.org/config/
 import os from 'os';
 import pageRoutes from './router.config';
+import webpackPlugin from './plugin.config';
+import defaultSettings from '../src/defaultSettings';
 
 const plugins = [
   [
     'umi-plugin-react',
     {
-      antd: false,
+      antd: true,
       dva: {
         hmr: true,
       },
@@ -14,19 +16,21 @@ const plugins = [
         ie: 11,
       },
 
-      // production开启按需加载
-      ...(process.env.NODE_ENV === 'production'?{
-        dynamicImport: {
-          webpackChunkName: true,
-          loadingComponent: './components/PageLoading',
-          // level:1
-        },
-      }:{}),
-
+      locale: {
+        enable: true, // default false
+        default: 'zh-CN', // default zh-CN
+        baseNavigator: true, // default true, when it is true, will use `navigator.language` overwrite default
+      },
+      // 按需加载
+      // dynamicImport: {
+      //   webpackChunkName: true,
+      //   loadingComponent: './components/PageLoading/index',
+      //   level:1
+      // },
       ...(!process.env.TEST && os.platform() === 'darwin'
         ? {
             dll: {
-              include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch', 'lodash', 'moment','immutable'],
+              include: ['dva', 'dva/router', 'dva/saga', 'dva/fetch', 'lodash', 'moment'],
               exclude: ['@babel/runtime'],
             },
             hardSource: true,
@@ -58,27 +62,26 @@ const config = {
   },
   // 路由配置
   routes: pageRoutes,
-
-  // externals: {
-  //   '@antv/data-set': 'DataSet',
-  // },
-  //反向代理，解决开发时cros问题
+  // Theme for antd
+  // https://ant.design/docs/react/customize-theme-cn
+  theme: {
+    'primary-color': defaultSettings.primaryColor,
+  },
+  externals: {
+    '@antv/data-set': 'DataSet',
+  },
   proxy: {
     '/api/': {
       target: 'http://localhost:7001/',
+      // target: 'http://47.104.239.185/',
       changeOrigin: true,
       pathRewrite: { '^/': '' },
     },
-    '/megaupload': {
-      target: 'http://47.104.239.185/megaupload',
+    '/github': {
+      target: 'https://api.github.com/',
       changeOrigin: true,
+      pathRewrite: { '^/github': '/' }, // 实际的请求路径 https://api.github.com/users/octocat
     },
-    "/github":{
-      target:"https://api.github.com/",
-      changeOrigin: true,
-      pathRewrite: { '^/github': '/' },//实际的请求路径 https://api.github.com/users/octocat
-    }
-
   },
   ignoreMomentLocale: true,
   lessLoaderOptions: {
@@ -90,7 +93,7 @@ const config = {
     getLocalIdent: (context, localIdentName, localName) => {
       if (
         context.resourcePath.includes('node_modules') ||
-        //context.resourcePath.includes('ant.design.pro.less') ||
+        context.resourcePath.includes('ant.design.pro.less') ||
         context.resourcePath.includes('global.less')
       ) {
         return localName;
@@ -108,13 +111,13 @@ const config = {
     },
   },
 
-  // outputPath: './megaconsole', // 导出路径
-  // publicPath: '/megaconsole/', // 导出index引用带megaconsole前缀
+  outputPath: './megaconsole', // 导出路径
+  publicPath: '/megaconsole/', // 导出index引用带megaconsole前缀
   hash: true, // 导出文件带hash
 
-  // manifest: {
-  //   basePath: '/megaconsole',
-  // },
+  manifest: {
+    basePath: '/megaconsole',
+  },
   // 该字段控制动态修改主题
   // chainWebpack: webpackPlugin,//改善经常编译95%的问题
 };
